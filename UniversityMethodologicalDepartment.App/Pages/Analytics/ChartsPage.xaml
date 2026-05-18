@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page x:Class="UniversityMethodologicalDepartment.App.Pages.Analytics.ChartsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:UniversityMethodologicalDepartment.App.Controls"
+      xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Loaded="Page_Loaded">
+
+    <StackPanel Padding="24"
+                Spacing="12"
+                HorizontalAlignment="Stretch">
+        <StackPanel HorizontalAlignment="Left"
+                    Spacing="12">
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}"
+                       Text="Диаграммы" />
+
+            <!--<TextBlock Style="{StaticResource SecondaryHintTextStyle}"
+                       TextWrapping="Wrap"
+                       Text="Диаграмма показывает суммарное количество часов лабораторных занятий по кафедрам в выбранном семестре." />-->
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="8">
+                <ComboBox Width="360"
+                          ItemsSource="{Binding ChartOptions, Mode=OneWay}"
+                          SelectedItem="{Binding SelectedChartOption, Mode=TwoWay}"
+                          DisplayMemberPath="Title"
+                          VerticalAlignment="Bottom"
+                          Header="Тип диаграммы" />
+                <controls:SemesterSelectorControl x:Name="SemesterSelector"
+                                                  SelectedSemester="{Binding SelectedSemester, Mode=TwoWay}"
+                                                  SemesterChanged="SemesterSelector_SemesterChanged"
+                                                  VerticalAlignment="Bottom" />
+                <Button Content="Выполнить"
+                        Command="{Binding LoadCommand}"
+                        VerticalAlignment="Bottom" />
+                <Button Content="Экспорт PNG"
+                        Click="ExportChartButton_Click"
+                        VerticalAlignment="Bottom" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="8">
+                <ProgressRing Width="18"
+                              Height="18"
+                              IsActive="{Binding IsLoading, Mode=OneWay}" />
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding StatusMessage, Mode=OneWay}" />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel HorizontalAlignment="Stretch"
+                    Spacing="8">
+            <ScrollViewer x:Name="ChartScrollViewer"
+                          HorizontalAlignment="Stretch"
+                          HorizontalScrollBarVisibility="Auto"
+                          HorizontalScrollMode="Enabled"
+                          VerticalScrollBarVisibility="Disabled"
+                          VerticalScrollMode="Disabled"
+                          ZoomMode="Disabled"
+                          SizeChanged="ChartScrollViewer_SizeChanged">
+                <Border Padding="16"
+                        CornerRadius="8"
+                        BorderThickness="1"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                    <lvc:CartesianChart x:Name="DepartmentHoursChart"
+                                        Height="420"
+                                        MinHeight="320"
+                                        MaxHeight="540"
+                                        HorizontalAlignment="Stretch"
+                                        ZoomMode="X"
+                                        LegendPosition="Hidden" />
+                </Border>
+            </ScrollViewer>
+            <Border Height="28"
+                    Background="Transparent" />
+        </StackPanel>
+    </StackPanel>
+</Page>

@@ -1,0 +1,110 @@
+@startuml db-logical
+hide circle
+skinparam linetype ortho
+skinparam roundcorner 8
+skinparam shadowing false
+skinparam entity {
+  BackgroundColor #FEFEFE
+  BorderColor #333333
+}
+
+' Сущности: IE-нотация (entity = class); без «: тип» после имени атрибута
+
+entity Faculty {
+  * id <<PK>>
+  --
+  * name //название факультета//
+  * dean_id <<FK>> //декан//
+}
+
+entity Employee {
+  * id <<PK>>
+  --
+  * surname //фамилия//
+  * name //имя//
+  * patronymic //отчество//
+  * degree //учёная степень//
+  * title //учёное звание//
+  * phone //телефон//
+  * email //почта//
+  * department_id <<FK>> //кафедра//
+  section_id <<FK>> //секция (опционально)//
+}
+
+entity Department {
+  * id <<PK>>
+  --
+  * faculty_id <<FK>>
+  * head_id <<FK>> //заведующий кафедрой//
+  * name //название кафедры//
+  * phones //телефон(ы)//
+}
+
+entity Section {
+  * id <<PK>>
+  --
+  * department_id <<FK>>
+  * name //название секции//
+  head_id <<FK>> //руководитель (опционально)//
+  * phones //телефон(ы)//
+}
+
+entity Discipline {
+  * id <<PK>>
+  --
+  * department_id <<FK>>
+  * name //название дисциплины//
+}
+
+entity Specialty {
+  * id <<PK>>
+  --
+  * code //код специальности//
+  * name //название//
+  * qualification //присваиваемая квалификация//
+  * duration //продолжительность (лет)//
+  * form_of_study //форма обучения//
+}
+
+entity CurriculumItem {
+  * id <<PK>>
+  --
+  * discipline_id <<FK>>
+  * specialty_id <<FK>>
+  * semester //семестр//
+  * lecture_hours //часы лекций//
+  * lab_hours //часы лабораторных//
+  * usr_hours //часы УСР//
+  * practical_hours //часы практических//
+  * has_course_project //курсовой проект//
+  * is_credit //зачёт//
+  * is_exam //экзамен//
+}
+
+entity AuditLog {
+  * id <<PK>>
+  --
+  * occurred_at //время события//
+  * actor_user_id //идентификатор пользователя//
+  * actor_display_name //имя пользователя//
+  * action //тип действия//
+  * table_name //таблица сущности//
+  * entity_id //id изменённой строки//
+  * old_row //состояние до изменения//
+  * new_row //состояние после изменения//
+}
+
+' Связи (соответствуют логической mermaid-диаграмме)
+
+Faculty ||--|| Employee : декан
+Faculty ||--o{ Department : входит
+Department ||--|| Employee : заведующий
+Department ||--o{ Employee : сотрудники
+Department ||--o{ Section : секции
+Section }o--|| Employee : руководитель
+Section ||--o{ Employee : сотрудники секции
+Department ||--o{ Discipline : преподаёт
+Specialty ||--o{ CurriculumItem : включена
+Discipline ||--o{ CurriculumItem : входит
+
+@enduml

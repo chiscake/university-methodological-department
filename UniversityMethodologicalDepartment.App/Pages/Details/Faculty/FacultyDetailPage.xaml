@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page x:Class="UniversityMethodologicalDepartment.App.Views.Details.FacultyDetailPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:UniversityMethodologicalDepartment.App.Controls"
+      xmlns:ctk="using:CommunityToolkit.WinUI.Controls"
+      xmlns:dev="using:DevWinUI"
+      xmlns:vm="using:UniversityMethodologicalDepartment.App.ViewModels.Details"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:Key="FacultyEditorTemplate"
+                      x:DataType="vm:FacultyDetailPageViewModel">
+            <StackPanel Spacing="12">
+                <TextBlock Text="{Binding EditorStatusMessage, Mode=OneWay}"
+                           Style="{StaticResource DetailStatusMessageTextStyle}"
+                           Foreground="{Binding EditorStatusForeground, Mode=OneWay}" />
+                <TextBox Header="Название факультета"
+                         Style="{StaticResource ValidatingTextBoxStyle}"
+                         dev:Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                         dev:Validation.ValidationPropertyName="Name"
+                         dev:Validation.ValidationProvider="{Binding EditModel}"
+                         Text="{Binding EditModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <AutoSuggestBox Header="Декан"
+                                Text="{Binding DeanQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding DeanSuggestions, Mode=OneWay}"
+                                TextMemberPath="Title"
+                                TextChanged="DeanAutoSuggestBox_TextChanged"
+                                SuggestionChosen="DeanAutoSuggestBox_SuggestionChosen"
+                                QuerySubmitted="DeanAutoSuggestBox_QuerySubmitted">
+                    <AutoSuggestBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Title, Mode=OneWay}" />
+                                <TextBlock Style="{StaticResource SecondaryHintTextStyle}"
+                                           Text="{Binding Subtitle, Mode=OneWay}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </AutoSuggestBox.ItemTemplate>
+                </AutoSuggestBox>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid x:Name="DetailPageRoot"
+          Style="{StaticResource DetailPageRootGridStyle}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"
+                              MinWidth="{StaticResource DetailPageDetailsColumnMinWidth}" />
+            <ColumnDefinition Width="8" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Column="0"
+                      Grid.Row="0"
+                      Style="{StaticResource DetailPageScrollViewerStyle}">
+            <Border Style="{StaticResource DetailPageCardBorderStyle}">
+                <StackPanel Style="{StaticResource DetailContentStackStyle}">
+                <StackPanel Style="{StaticResource DetailFieldPanelStyle}">
+                    <TextBlock Text="Факультет"
+                               Style="{StaticResource DetailFieldLabelStyle}" />
+                    <TextBlock x:Name="PageHeader"
+                               MaxWidth="720"
+                               AutomationProperties.HeadingLevel="Level1"
+                               Style="{StaticResource TitleTextBlockStyle}"
+                               Text="{Binding Title, Mode=OneWay}" />
+                </StackPanel>
+                <TextBlock Text="{Binding StatusMessage, Mode=OneWay}"
+                           Style="{StaticResource DetailStatusMessageTextStyle}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                <StackPanel Style="{StaticResource DetailSectionPanelStyle}">
+                    <TextBlock Text="Основное"
+                               Style="{StaticResource DetailSectionTitleStyle}" />
+                    <StackPanel Style="{StaticResource DetailFieldPanelStyle}">
+                    <TextBlock Text="Декан"
+                               Style="{StaticResource DetailFieldLabelStyle}" />
+                    <StackPanel Spacing="4">
+                        <HyperlinkButton Style="{StaticResource DetailHyperlinkButtonStyle}"
+                                       Command="{Binding NavigateToEmployeeCommand}"
+                                       CommandParameter="{Binding Faculty.Dean}">
+                            <TextBlock>
+                                <Run Text="{Binding Faculty.Dean.Surname, Mode=OneWay, FallbackValue=''}" />
+                                <Run Text="{Binding Faculty.Dean.Name, Mode=OneWay, FallbackValue=''}" />
+                                <Run Text="{Binding Faculty.Dean.Patronymic, Mode=OneWay, FallbackValue=''}" />
+                            </TextBlock>
+                        </HyperlinkButton>
+                        <TextBlock Style="{StaticResource SecondaryHintTextStyle}"
+                                   Visibility="{Binding Faculty.Dean.Degree, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}}"
+                                   Text="{Binding Faculty.Dean.Degree, Mode=OneWay, FallbackValue=''}" />
+                        <TextBlock Style="{StaticResource SecondaryHintTextStyle}"
+                                   Visibility="{Binding Faculty.Dean.Title, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}}"
+                                   Text="{Binding Faculty.Dean.Title, Mode=OneWay, FallbackValue=''}" />
+                    </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Style="{StaticResource DetailSectionPanelStyle}">
+                    <TextBlock Text="Информация"
+                               Style="{StaticResource DetailSectionTitleStyle}" />
+                    <StackPanel Style="{StaticResource DetailFieldPanelStyle}">
+                    <TextBlock Text="Кафедры"
+                               Style="{StaticResource DetailFieldLabelStyle}" />
+                    <ItemsControl ItemsSource="{Binding Faculty.Departments, Mode=OneWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <HyperlinkButton Style="{StaticResource DetailHyperlinkButtonStyle}"
+                                                 Margin="0,0,0,4"
+                                                 Command="{Binding DataContext.NavigateToDepartmentCommand, ElementName=DetailPageRoot}"
+                                                 CommandParameter="{Binding}">
+                                    <TextBlock Text="{Binding Name, Mode=OneTime}" />
+                                </HyperlinkButton>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+
+        <StackPanel Grid.Column="0"
+                    Grid.Row="1"
+                    Style="{StaticResource DetailActionsPanelStyle}"
+                    Visibility="{Binding CanShowActions, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Button Content="Удалить"
+                    Style="{StaticResource DetailDangerActionButtonStyle}"
+                    Command="{Binding DeleteEntityCommand}" />
+            <Button Content="Редактировать"
+                    Command="{Binding OpenEditorCommand}" />
+        </StackPanel>
+
+        <ctk:GridSplitter Grid.Column="1"
+                Grid.RowSpan="2"
+                      Style="{StaticResource DetailPageGridSplitterStyle}"
+                      ResizeDirection="Columns"
+                      ResizeBehavior="PreviousAndNext"
+                      Visibility="{Binding CanShowEditor, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+        <controls:DetailEditorHost Grid.Column="2"
+                                   Grid.RowSpan="2"
+                                   Header="Редактирование факультета"
+                                   IsOpen="{Binding CanShowEditor, Mode=OneWay}"
+                                   CanSave="{Binding CanSaveEditor, Mode=OneWay}"
+                                   IsBusy="{Binding IsSaving, Mode=OneWay}"
+                                   SaveCommand="{Binding SaveEditorCommand}"
+                                   CancelCommand="{Binding CloseEditorCommand}"
+                                   EditorContent="{Binding}"
+                                   EditorContentTemplate="{StaticResource FacultyEditorTemplate}" />
+    </Grid>
+</Page>

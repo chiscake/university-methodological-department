@@ -1,0 +1,19 @@
+{
+  "name": "university-methodological-department",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:reset": "supabase db reset",
+    "seed:auth": "node scripts/seed-auth-user.js",
+    "db:reset:seed": "pnpm run db:reset && pnpm run seed:auth"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.29.1",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.47.10"
+  }
+}

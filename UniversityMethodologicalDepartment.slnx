@@ -1,0 +1,15 @@
+<Solution>
+  <Configurations>
+    <Platform Name="arm64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="UniversityMethodologicalDepartment.App/UniversityMethodologicalDepartment.App.csproj">
+    <Platform Solution="*|arm64" Project="ARM64" />
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+    <Deploy />
+  </Project>
+  <Project Path="UniversityMethodologicalDepartment.Bus/UniversityMethodologicalDepartment.Bus.csproj" Id="5027bdf9-e08c-4b86-a4fb-aece12a67dba" />
+  <Project Path="UniversityMethodologicalDepartment.Tests/UniversityMethodologicalDepartment.Tests.csproj" Id="e5ff7670-b795-476f-9cc1-6000a40550e1" />
+</Solution>

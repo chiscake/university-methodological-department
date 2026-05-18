@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application
+    x:Class="UniversityMethodologicalDepartment.App.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UniversityMethodologicalDepartment.App"
+    xmlns:converters="using:UniversityMethodologicalDepartment.App.Converters">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <ResourceDictionary Source="ms-appx:///Styles/Styles.xaml" />
+                <!-- DevWinUI NuGet: ms-appx:///DevWinUI/Themes/Generic.xaml often fails at runtime (MRT / unpackaged). Ship minimal validation theme locally. -->
+                <ResourceDictionary Source="ms-appx:///Styles/DevWinUI/DevWinUIValidationTheme.xaml" />
+                <ResourceDictionary Source="ms-appx:///DevWinUI.Controls/Themes/Generic.xaml" />
+                <ResourceDictionary Source="ms-appx:///Styles/DetailEditorResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <x:String x:Key="AppTitleName">Методический отдел университета</x:String>
+            <ImageSource x:Key="HeaderCover">ms-appx:///Assets/sl-p.jpg</ImageSource>
+            <converters:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:BooleanToYesNoConverter x:Key="BoolToYesNoConverter" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters:NullOrWhitespaceToPlaceholderConverter x:Key="NullOrWhitespaceToPlaceholderConverter" />
+            <!-- String items from Validation.Errors; use Binding (not x:Bind+x:String) so XBF accepts App-level template. -->
+            <DataTemplate x:Key="ValidationTemplate">
+                <TextBlock Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                           Text="{Binding}"
+                           TextWrapping="Wrap" />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

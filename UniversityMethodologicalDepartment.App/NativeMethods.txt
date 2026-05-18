@@ -1,0 +1,5 @@
+GetCurrentPackageFullName
+GetModuleHandle
+GetCurrentThreadId
+SetWindowsHookEx
+CallNextHookEx

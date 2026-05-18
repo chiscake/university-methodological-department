@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page x:Class="UniversityMethodologicalDepartment.App.Views.Details.CurriculumItemDetailPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:UniversityMethodologicalDepartment.App.Controls"
+      xmlns:ctk="using:CommunityToolkit.WinUI.Controls"
+      xmlns:dev="using:DevWinUI"
+      xmlns:vm="using:UniversityMethodologicalDepartment.App.ViewModels.Details"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style x:Key="TokenViewSelectorBarStyle" TargetType="SelectorBar">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Padding" Value="{ThemeResource SelectorBarPadding}" />
+        </Style>
+
+        <DataTemplate x:Key="CurriculumItemEditorTemplate"
+                      x:DataType="vm:CurriculumItemDetailPageViewModel">
+            <StackPanel Spacing="12">
+                <TextBlock Text="{Binding EditorStatusMessage, Mode=OneWay}"
+                           Style="{StaticResource DetailStatusMessageTextStyle}"
+                           Foreground="{Binding EditorStatusForeground, Mode=OneWay}" />
+
+                <controls:SemesterSelectorControl x:Name="SemesterBox"
+                                                  Header="Семестр"
+                                                  dev:Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                                                  dev:Validation.ValidationPropertyName="Semester"
+                                                  dev:Validation.ValidationProvider="{Binding EditModel}"
+                                                  SelectedSemester="{Binding EditModel.Semester, Mode=TwoWay}" />
+                <ItemsRepeater ItemsSource="{Binding Path=(dev:Validation.Errors), ElementName=SemesterBox}"
+                               ItemTemplate="{StaticResource ValidationTemplate}" />
+
+                <NumberBox x:Name="LectureHoursBox"
+                           Header="Лекционные часы"
+                           Minimum="0"
+                           Maximum="1000"
+                           dev:Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                           dev:Validation.ValidationPropertyName="LectureHours"
+                           dev:Validation.ValidationProvider="{Binding EditModel}"
+                           Value="{Binding EditModel.LectureHours, Mode=TwoWay}"
+                           PreviewKeyDown="{x:Bind dev:PreviewKeyDownHelper.AcceptNumbersOnly}" />
+                <ItemsRepeater ItemsSource="{Binding Path=(dev:Validation.Errors), ElementName=LectureHoursBox}"
+                               ItemTemplate="{StaticResource ValidationTemplate}" />
+
+                <NumberBox x:Name="LabHoursBox"
+                           Header="Лабораторные часы"
+                           Minimum="0"
+                           Maximum="1000"
+                           dev:Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                           dev:Validation.ValidationPropertyName="LabHours"
+                           dev:Validation.ValidationProvider="{Binding EditModel}"
+                           Value="{Binding EditModel.LabHours, Mode=TwoWay}"
+                           PreviewKeyDown="{x:Bind dev:PreviewKeyDownHelper.AcceptNumbersOnly}" />
+                <ItemsRepeater ItemsSource="{Binding Path=(dev:Validation.Errors), ElementName=LabHoursBox}"
+                               ItemTemplate="{StaticResource ValidationTemplate}" />
+
+                <NumberBox x:Name="UsrHoursBox"
+                           Header="Часы УСР"
+                           Minimum="0"
+                           Maximum="1000"
+                           dev:Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                           dev:Validation.ValidationPropertyName="UsrHours"
+                           dev:Validation.ValidationProvider="{Binding EditModel}"
+                           Value="{Binding EditModel.UsrHours, Mode=TwoWay}"
+                           PreviewKeyDown="{x:Bind dev:PreviewKeyDownHelper.AcceptNumbersOnly}" />
+                <ItemsRepeater ItemsSource="{Binding Path=(dev:Validation.Errors), ElementName=UsrHoursBox}"
+                               ItemTemplate="{StaticResource ValidationTemplate}" />
+
+                <NumberBox x:Name="PracticalHoursBox"
+                           Header="Практические часы"
+                           Minimum="0"
+                           Maximum="1000"
+                           dev:Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                           dev:Validation.ValidationPropertyName="PracticalHours"
+                           dev:Validation.ValidationProvider="{Binding EditModel}"
+                           Value="{Binding EditModel.PracticalHours, Mode=TwoWay}"
+                           PreviewKeyDown="{x:Bind dev:PreviewKeyDownHelper.AcceptNumbersOnly}" />
+                <ItemsRepeater ItemsSource="{Binding Path=(dev:Validation.Errors), ElementName=PracticalHoursBox}"
+                               ItemTemplate="{StaticResource ValidationTemplate}" />
+
+                <CheckBox Content="Курсовой проект"
+                          IsChecked="{Binding EditModel.HasCourseProject, Mode=TwoWay}" />
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Форма контроля" />
+                    <dev:SelectorBarSegmented Style="{StaticResource TokenViewSelectorBarStyle}"
+                                              SelectedIndex="{Binding EditModel.SelectedControlFormIndex, Mode=TwoWay}">
+                        <SelectorBarItem Text="Зачет"
+                                         IsEnabled="{Binding EditModel.IsCreditControlAvailable, Mode=OneWay}" />
+                        <SelectorBarItem Text="Экзамен" />
+                    </dev:SelectorBarSegmented>
+                    <TextBlock Text="При курсовом проекте доступен только экзамен."
+                               Style="{StaticResource SecondaryHintTextStyle}"
+                               Visibility="{Binding EditModel.HasCourseProject, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                </StackPanel>
+                <AutoSuggestBox Header="Дисциплина"
+                                Text="{Binding DisciplineQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding DisciplineSuggestions, Mode=OneWay}"
+                                TextMemberPath="Title"
+                                TextChanged="DisciplineAutoSuggestBox_TextChanged"
+                                SuggestionChosen="DisciplineAutoSuggestBox_SuggestionChosen"
+                                QuerySubmitted="DisciplineAutoSuggestBox_QuerySubmitted">
+                    <AutoSuggestBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Title, Mode=OneWay}" />
+                                <TextBlock Style="{StaticResource SecondaryHintTextStyle}"
+                                           Text="{Binding Subtitle, Mode=OneWay}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </AutoSuggestBox.ItemTemplate>
+                </AutoSuggestBox>
+                <AutoSuggestBox Header="Специальность"
+                                Text="{Binding SpecialtyQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding SpecialtySuggestions, Mode=OneWay}"
+                                TextMemberPath="Title"
+                                TextChanged="SpecialtyAutoSuggestBox_TextChanged"
+                                SuggestionChosen="SpecialtyAutoSuggestBox_SuggestionChosen"
+                                QuerySubmitted="SpecialtyAutoSuggestBox_QuerySubmitted">
+                    <AutoSuggestBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Title, Mode=OneWay}" />
+                                <TextBlock Style="{StaticResource SecondaryHintTextStyle}"
+                                           Text="{Binding Subtitle, Mode=OneWay}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </AutoSuggestBox.ItemTemplate>
+                </AutoSuggestBox>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Style="{StaticResource DetailPageRootGridStyle}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"
+                              MinWidth="{StaticResource DetailPageDetailsColumnMinWidth}" />
+            <ColumnDefinition Width="8" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Column="0"
+                      Grid.Row="0"
+                      Style="{StaticResource DetailPageScrollViewerStyle}">
+            <Border Style="{StaticResource DetailPageCardBorderStyle}">
+                <StackPanel Style="{StaticResource DetailContentStackStyle}">
+                <StackPanel Style="{StaticResource DetailFieldPanelStyle}">
+                    <TextBlock Text="Учебный план"
+                               Style="{StaticResource DetailFieldLabelStyle}" />
+                    <TextBlock x:Name="PageHeader"
+                               MaxWidth="720"
+                               AutomationProperties.HeadingLevel="Level1"
+                               Style="{StaticResource TitleTextBlockStyle}"
+                               Text="{Binding Title, Mode=OneWay}" />
+                </StackPanel>
+                <TextBlock Text="{Binding StatusMessage, Mode=OneWay}"
+                           Style="{StaticResource DetailStatusMessageTextStyle}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                <StackPanel Style="{StaticResource DetailSectionPanelStyle}">
+                    <TextBlock Text="Основное"
+                               Style="{StaticResource DetailSectionTitleStyle}" />
+                    <StackPanel Style="{StaticResource DetailFieldPanelStyle}">
+                    <TextBlock Text="Дисциплина"
+                               Style="{StaticResource DetailFieldLabelStyle}" />
+                    <HyperlinkButton Style="{StaticResource DetailHyperlinkButtonStyle}"
+                                     Command="{Binding NavigateToDisciplineCommand}"
+                                     CommandParameter="{Binding CurriculumItem.Discipline}">
+                        <TextBlock Style="{StaticResource DetailFieldValueStyle}"
+                                   Text="{Binding CurriculumItem.Discipline.Name, Mode=OneWay, FallbackValue='', Converter={StaticResource NullOrWhitespaceToPlaceholderConverter}}" />
+                    </HyperlinkButton>
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource DetailFieldPanelStyle}">
+                    <TextBlock Text="Специальность"
+                               Style="{StaticResource DetailFieldLabelStyle}" />
+                    <TextBlock Style="{StaticResource DetailFieldValueStyle}"
+                               Text="{Binding CurriculumItem.Specialty.Name, Mode=OneWay, FallbackValue='', Converter={StaticResource NullOrWhitespaceToPlaceholderConverter}}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource DetailFieldPanelStyle}">
+                    <TextBlock Text="Семестр"
+                               Style="{StaticResource DetailFieldLabelStyle}" />
+                    <TextBlock Style="{StaticResource DetailFieldValueStyle}"
+                               Text="{Binding CurriculumItem.Semester, Mode=OneWay}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource DetailFieldPanelStyle}">
+                    <TextBlock Text="Нагрузка по видам занятий"
+                               Style="{StaticResource DetailFieldLabelStyle}" />
+                    <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12,8">
+                        <Grid ColumnSpacing="16" RowSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="0"
+                                       Text="Лекционные часы"
+                                       Style="{StaticResource DetailFieldValueStyle}" />
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="1"
+                                       HorizontalTextAlignment="Right"
+                                       Text="{Binding CurriculumItem.LectureHours, Mode=OneWay}"
+                                       Style="{StaticResource DetailFieldValueStyle}" />
+
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="0"
+                                       Text="Лабораторные часы"
+                                       Style="{StaticResource DetailFieldValueStyle}" />
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="1"
+                                       HorizontalTextAlignment="Right"
+                                       Text="{Binding CurriculumItem.LabHours, Mode=OneWay}"
+                                       Style="{StaticResource DetailFieldValueStyle}" />
+
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       Text="Часы УСР"
+                                       Style="{StaticResource DetailFieldValueStyle}" />
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="1"
+                                       HorizontalTextAlignment="Right"
+                                       Text="{Binding CurriculumItem.UsrHours, Mode=OneWay}"
+                                       Style="{StaticResource DetailFieldValueStyle}" />
+
+                            <TextBlock Grid.Row="3"
+                                       Grid.Column="0"
+                                       Text="Практические часы"
+                                       Style="{StaticResource DetailFieldValueStyle}" />
+                            <TextBlock Grid.Row="3"
+                                       Grid.Column="1"
+                                       HorizontalTextAlignment="Right"
+                                       Text="{Binding CurriculumItem.PracticalHours, Mode=OneWay}"
+                                       Style="{StaticResource DetailFieldValueStyle}" />
+
+                            <Rectangle Grid.Row="4"
+                                       Grid.ColumnSpan="2"
+                                       Margin="0,2,0,2"
+                                       Height="1"
+                                       Fill="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+                            <TextBlock Grid.Row="5"
+                                       Grid.Column="0"
+                                       Margin="0,8,0,0"
+                                       Text="Итого"
+                                       FontWeight="SemiBold" />
+                            <TextBlock Grid.Row="5"
+                                       Grid.Column="1"
+                                       Margin="0,8,0,0"
+                                       HorizontalTextAlignment="Right"
+                                       Text="{Binding TotalHours, Mode=OneWay}"
+                                       FontWeight="SemiBold" />
+                        </Grid>
+                    </Border>
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource DetailFieldPanelStyle}">
+                    <TextBlock Text="Курсовой проект"
+                               Style="{StaticResource DetailFieldLabelStyle}" />
+                    <TextBlock Style="{StaticResource DetailFieldValueStyle}"
+                               Text="{Binding CurriculumItem.HasCourseProject, Mode=OneWay, Converter={StaticResource BoolToYesNoConverter}}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource DetailFieldPanelStyle}">
+                    <TextBlock Text="Форма контроля"
+                               Style="{StaticResource DetailFieldLabelStyle}" />
+                    <TextBlock Style="{StaticResource DetailFieldValueStyle}"
+                               Text="{Binding ControlFormDisplay, Mode=OneWay}" />
+                    </StackPanel>
+                </StackPanel>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+
+        <StackPanel Grid.Column="0"
+                    Grid.Row="1"
+                    Style="{StaticResource DetailActionsPanelStyle}"
+                    Visibility="{Binding CanShowActions, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Button Content="Удалить"
+                    Style="{StaticResource DetailDangerActionButtonStyle}"
+                    Command="{Binding DeleteEntityCommand}" />
+            <Button Content="Редактировать"
+                    Command="{Binding OpenEditorCommand}" />
+        </StackPanel>
+
+        <ctk:GridSplitter Grid.Column="1"
+                Grid.RowSpan="2"
+                      Style="{StaticResource DetailPageGridSplitterStyle}"
+                      ResizeDirection="Columns"
+                      ResizeBehavior="PreviousAndNext"
+                      Visibility="{Binding CanShowEditor, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+        <controls:DetailEditorHost Grid.Column="2"
+                                   Grid.RowSpan="2"
+                                   Header="Редактирование элемента плана"
+                                   IsOpen="{Binding CanShowEditor, Mode=OneWay}"
+                                   CanSave="{Binding CanSaveEditor, Mode=OneWay}"
+                                   IsBusy="{Binding IsSaving, Mode=OneWay}"
+                                   SaveCommand="{Binding SaveEditorCommand}"
+                                   CancelCommand="{Binding CloseEditorCommand}"
+                                   EditorContent="{Binding}"
+                                   EditorContentTemplate="{StaticResource CurriculumItemEditorTemplate}" />
+    </Grid>
+</Page>

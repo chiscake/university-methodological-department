@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory)..\UniversityMethodologicalDepartment.Tests.runsettings</RunSettingsFilePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="10.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.7" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
+    <PackageReference Include="Supabase" Version="1.1.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UniversityMethodologicalDepartment.Bus\UniversityMethodologicalDepartment.Bus.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\UniversityMethodologicalDepartment.App\Contracts\IReferenceSearchService.cs" Link="AppLinked\Contracts\IReferenceSearchService.cs" />
+    <Compile Include="..\UniversityMethodologicalDepartment.App\Models\ReferenceSearchItem.cs" Link="AppLinked\Models\ReferenceSearchItem.cs" />
+    <Compile Include="..\UniversityMethodologicalDepartment.App\Models\ReferenceSearchKind.cs" Link="AppLinked\Models\ReferenceSearchKind.cs" />
+    <Compile Include="..\UniversityMethodologicalDepartment.App\Models\ReferenceSearchScope.cs" Link="AppLinked\Models\ReferenceSearchScope.cs" />
+    <Compile Include="..\UniversityMethodologicalDepartment.App\Services\ReferenceSearchService.cs" Link="AppLinked\Services\ReferenceSearchService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

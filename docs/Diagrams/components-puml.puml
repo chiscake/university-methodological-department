@@ -1,0 +1,70 @@
+@startuml components
+title Component diagram — артефакты сборки и зависимости
+
+left to right direction
+skinparam componentStyle rectangle
+skinparam roundcorner 8
+skinparam shadowing false
+skinparam ArrowColor #333333
+skinparam component {
+  BackgroundColor #FEFEFE
+  BorderColor #333333
+}
+skinparam database {
+  BackgroundColor #E8F4FF
+  BorderColor #333333
+}
+
+package "Артефакты сборки" {
+  [UniversityMethodologicalDepartment.exe] as EXE
+  [UniversityMethodologicalDepartment.App.dll] as APP
+  [UniversityMethodologicalDepartment.Bus.dll] as BUS
+}
+
+package "Зависимости App" as PkgApp {
+  [Microsoft.WindowsAppSDK.dll\nWinUI runtime] as WINUI
+  [CommunityToolkit.Mvvm.dll] as MVVM
+  [DocumentFormat.OpenXml.dll] as OXML
+  [LiveChartsCore.SkiaSharpView.WinUI.dll] as CHARTS
+  [Microsoft.Extensions.DependencyInjection.dll] as DI
+}
+
+package "Зависимости App и Bus" as PkgShared {
+  [Supabase.dll] as SB
+  [Microsoft.Extensions.Configuration*.dll] as CFG
+}
+
+package "Зависимости Bus" as PkgBus {
+  [Microsoft.EntityFrameworkCore.dll] as EF
+  [Npgsql.EntityFrameworkCore.PostgreSQL.dll] as NP
+}
+
+package "Внешняя среда" {
+  [Supabase Auth +\nEdge Functions] as SUPABASE
+  database "PostgreSQL" as PG
+  [supabase/migrations\n(base + rls + audit + triggers)] as SQL
+}
+
+EXE --> APP
+APP --> BUS
+
+APP --> WINUI
+APP --> MVVM
+APP --> OXML
+APP --> CHARTS
+APP --> SB
+APP --> CFG
+APP --> DI
+
+BUS --> EF
+BUS --> NP
+BUS --> SB
+BUS --> CFG
+
+APP --> SUPABASE
+BUS --> SUPABASE
+BUS --> PG
+SUPABASE --> PG
+SQL --> PG
+
+@enduml

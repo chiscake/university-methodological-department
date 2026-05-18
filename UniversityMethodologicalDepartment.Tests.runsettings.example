@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <EnvironmentVariables>
+      <Supabase__Url>http://127.0.0.1:54321</Supabase__Url>
+      <Supabase__AnonKey>sb_publishable_token_here</Supabase__AnonKey>
+      <ConnectionStrings__DefaultConnection>Host=127.0.0.1;Port=54322;Database=postgres;Username=app_readonly;Password=app_readonly_local;SSL Mode=Disable</ConnectionStrings__DefaultConnection>
+      <!-- AdminUserManagementTests: email/password пользователя с app_metadata.role=admin; пусто — тест пропускается -->
+      <Supabase__AdminTestEmail>admin@example.com</Supabase__AdminTestEmail>
+      <Supabase__AdminTestPassword>12345678</Supabase__AdminTestPassword>
+    </EnvironmentVariables>
+  </RunConfiguration>
+</RunSettings>

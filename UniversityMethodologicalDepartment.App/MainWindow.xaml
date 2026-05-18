@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window x:Class="UniversityMethodologicalDepartment.App.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:UniversityMethodologicalDepartment.App"
+        xmlns:models="using:UniversityMethodologicalDepartment.App.Models"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="university-methodological-department-app">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <Grid x:Name="rootGrid" Loaded="RootGrid_Loaded">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TitleBar x:Name="titleBar"
+                  Title="Система методического отдела"
+                  Subtitle=""
+                  BackRequested="TitleBar_BackRequested"
+                  IsBackButtonVisible="True"
+                  IsBackButtonEnabled="{Binding ElementName=rootFrame, Path=CanGoBack}"
+                  IsPaneToggleButtonVisible="True"
+                  PaneToggleRequested="TitleBar_PaneToggleRequested">
+            <TitleBar.IconSource>
+                <BitmapIconSource ShowAsMonochrome="False"
+                                  UriSource="ms-appx:///Assets/logo.ico" />
+            </TitleBar.IconSource>
+            <TitleBar.Content>
+                <AutoSuggestBox x:Name="globalSearchBox"
+                                Width="420"
+                                MaxWidth="480"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                PlaceholderText="Поиск по справочникам..."
+                                QueryIcon="Find"
+                                UpdateTextOnSelect="False"
+                                TextChanged="GlobalSearchBox_TextChanged"
+                                SuggestionChosen="GlobalSearchBox_SuggestionChosen"
+                                QuerySubmitted="GlobalSearchBox_QuerySubmitted"
+                                >
+                    <AutoSuggestBox.ItemTemplate>
+                        <DataTemplate x:DataType="models:ReferenceSearchItem">
+                            <StackPanel Padding="4,2" Orientation="Vertical">
+                                <TextBlock FontWeight="SemiBold"
+                                           Text="{x:Bind Title}"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock Margin="0,2,0,0"
+                                           FontSize="12"
+                                           Opacity="0.7"
+                                           Text="{x:Bind Subtitle}"
+                                           TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </AutoSuggestBox.ItemTemplate>
+                    <AutoSuggestBox.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="F"
+                                             Invoked="GlobalSearchAccelerator_Invoked"
+                                             Modifiers="Control" />
+                    </AutoSuggestBox.KeyboardAccelerators>
+                </AutoSuggestBox>
+            </TitleBar.Content>
+        </TitleBar>
+
+        <NavigationView x:Name="rootNavigationView"
+                        Grid.Row="1"
+                        IsBackButtonVisible="Collapsed"
+                        IsPaneToggleButtonVisible="False"
+                        PaneDisplayMode="Auto"
+                        Loaded="RootNavigationView_Loaded"
+                        SelectionChanged="RootNavigationView_SelectionChanged">
+            <NavigationView.MenuItems>
+                <!-- Главная -->
+                <NavigationViewItem x:Name="homeItem"
+                                    Content="Главная"
+                                    Icon="Home"
+                                    Tag="Home" />
+
+                <!-- Справочники -->
+                <NavigationViewItemHeader Content="Справочники" />
+                <NavigationViewItem Content="Факультеты"
+                                    Icon="Library"
+                                    Tag="Faculties">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Content="Факультет 1"
+                                            Tag="Faculty1" />
+                        <NavigationViewItem Content="Факультет 2"
+                                            Tag="Faculty2" />
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+
+                <NavigationViewItem Content="Кафедры"
+                                    Icon="Folder"
+                                    Tag="Departments">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Content="Кафедра 1"
+                                            Tag="Dept1" />
+                        <NavigationViewItem Content="Кафедра 2"
+                                            Tag="Dept2" />
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+
+                <NavigationViewItem Content="Секции"
+                                    Icon="ViewAll"
+                                    Tag="Sections" />
+
+                <NavigationViewItem Content="Дисциплины"
+                                    Icon="Document"
+                                    Tag="Disciplines" />
+
+                <NavigationViewItem Content="Специальности"
+                                    Icon="Page"
+                                    Tag="Specialties" />
+
+                <NavigationViewItem Content="Учебный план"
+                                    Icon="Calendar"
+                                    Tag="Curriculums" />
+
+                <NavigationViewItem Content="Сотрудники"
+                                    Icon="People"
+                                    Tag="Employees" />
+
+                <!-- Администрирование -->
+                <NavigationViewItemHeader x:Name="adminHeader"
+                                          Content="Администрирование"
+                                          Visibility="Collapsed" />
+                <NavigationViewItem x:Name="adminJournalItem"
+                                    Content="Журнал"
+                                    Icon="PreviewLink"
+                                    Tag="AdminJournal"
+                                    Visibility="Collapsed" />
+                <NavigationViewItem x:Name="adminUsersItem"
+                                    Content="Управление пользователями"
+                                    Icon="Admin"
+                                    Tag="AdminUsers"
+                                    Visibility="Collapsed" />
+
+
+                <!-- Аналитика и отчёты -->
+                <NavigationViewItemHeader Content="Аналитика и отчёты" />
+                <NavigationViewItem Content="Запросы"
+                                    Icon="Find"
+                                    Tag="Queries" />
+                <NavigationViewItem Content="Диаграммы"
+                                    Icon="FourBars"
+                                    Tag="Charts" />
+                <NavigationViewItem Content="Отчёты"
+                                    Icon="Document"
+                                    Tag="Reports" />
+            </NavigationView.MenuItems>
+            <Frame x:Name="rootFrame" 
+                   Navigated="RootFrame_Navigated"/>
+        </NavigationView>
+
+    </Grid>
+</Window>

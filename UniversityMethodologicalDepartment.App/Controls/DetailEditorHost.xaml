@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="UniversityMethodologicalDepartment.App.Controls.DetailEditorHost"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Name="Root">
+
+    <Border x:Name="EditorContainer"
+            Style="{StaticResource DetailEditorContainerStyle}"
+            Visibility="{Binding IsOpen, ElementName=Root, Converter={StaticResource BoolToVisibilityConverter}}">
+        <Grid x:Name="EditorLayoutGrid"
+              RowSpacing="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="{Binding Header, ElementName=Root}"
+                       Style="{StaticResource SubtitleTextBlockStyle}" />
+
+            <ScrollViewer Grid.Row="1"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollMode="Auto"
+                          HorizontalScrollMode="Disabled">
+                <ContentPresenter Width="{Binding ActualWidth, ElementName=EditorLayoutGrid}"
+                                  HorizontalAlignment="Stretch"
+                                  Content="{Binding EditorContent, ElementName=Root}"
+                                  ContentTemplate="{Binding EditorContentTemplate, ElementName=Root}" />
+            </ScrollViewer>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8">
+                <Button Content="Сохранить"
+                        Command="{Binding SaveCommand, ElementName=Root}"
+                        IsEnabled="{Binding CanSave, ElementName=Root}" />
+                <Button Content="Отмена"
+                        Command="{Binding CancelCommand, ElementName=Root}" />
+                <ProgressRing Width="20"
+                              Height="20"
+                              IsActive="{Binding IsBusy, ElementName=Root}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="UniversityMethodologicalDepartment.App.Pages.Lists.DepartmentsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:shared="using:UniversityMethodologicalDepartment.App.Pages.Shared"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Loaded="Page_Loaded">
+
+    <Grid Padding="24" RowSpacing="12" MinWidth="920" MaxWidth="1100">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Style="{StaticResource TitleTextBlockStyle}"
+                   Text="Кафедры" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
+            <TextBox Width="420"
+                     PlaceholderText="Поиск по названию кафедры"
+                     Text="{Binding SearchText, Mode=TwoWay}" />
+            <Button Content="Искать"
+                    Command="{Binding SearchCommand}" />
+            <Button Content="Создать"
+                    Click="CreateButton_Click" />
+        </StackPanel>
+
+        <ListView Grid.Row="2"
+                  ItemsSource="{Binding Items, Mode=OneWay}"
+                  IsItemClickEnabled="True"
+                  ItemClick="ListView_ItemClick">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name, Mode=OneTime}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <StackPanel Grid.Row="3" Orientation="Vertical" Spacing="8">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <shared:DataStatusBar Status="{Binding Status, Mode=OneWay}" />
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding StatusMessage, Mode=OneWay}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="Назад"
+                        Command="{Binding PreviousPageCommand}" />
+                <Button Content="Вперёд"
+                        Command="{Binding NextPageCommand}" />
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding CurrentPage, Mode=OneWay}" />
+                <TextBlock VerticalAlignment="Center" Text="из" />
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding TotalPages, Mode=OneWay}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

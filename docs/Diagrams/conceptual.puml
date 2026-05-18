@@ -1,0 +1,60 @@
+@startuml db-conceptual
+title Концептуальная модель данных\n(сущности — прямоугольники, тип связи — шестиугольник, стрелки — однонаправленные)
+
+left to right direction
+skinparam shadowing false
+skinparam ArrowColor #2C3E50
+skinparam ArrowThickness 1.2
+skinparam rectangle {
+  BackgroundColor #DCECF8
+  BorderColor #2C3E50
+  roundCorner 2
+}
+skinparam hexagon {
+  BackgroundColor #FFF4DD
+  BorderColor #2C3E50
+}
+
+' --- Сущности (прямоугольники) ---
+rectangle "Факультет" as F
+rectangle "Кафедра" as K
+rectangle "Секция" as Sec
+rectangle "Сотрудник" as E
+rectangle "Специальность" as Spec
+rectangle "Дисциплина" as Disc
+rectangle "Учёт в плане" as CI
+
+' --- Типы связей (шестиугольник ≈ ромб в ER) ---
+hexagon "декан" as r_dean
+hexagon "входит" as r_in
+hexagon "заведует" as r_head
+hexagon "работает на кафедре" as r_emp
+hexagon "секции кафедры" as r_sec
+hexagon "руководит секцией" as r_sech
+hexagon "в секции" as r_secem
+hexagon "преподаёт" as r_disc
+hexagon "в плане специальности" as r_spec
+hexagon "по дисциплине" as r_disci
+
+F --> r_dean
+r_dean --> E
+F --> r_in
+r_in --> K
+K --> r_head
+r_head --> E
+K --> r_emp
+r_emp --> E
+K --> r_sec
+r_sec --> Sec
+Sec --> r_sech
+r_sech --> E
+Sec --> r_secem
+r_secem --> E
+K --> r_disc
+r_disc --> Disc
+Spec --> r_spec
+r_spec --> CI
+Disc --> r_disci
+r_disci --> CI
+
+@enduml

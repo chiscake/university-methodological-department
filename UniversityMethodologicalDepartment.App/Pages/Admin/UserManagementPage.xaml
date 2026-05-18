@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page x:Class="UniversityMethodologicalDepartment.App.Views.UserManagementPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Loaded="Page_Loaded">
+    <Grid Style="{StaticResource AdminPageRootGridStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="Управление пользователями"
+                   Style="{StaticResource TitleTextBlockStyle}" />
+
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    Spacing="8">
+            <Button Content="Обновить"
+                    Command="{Binding LoadCommand}" />
+            <Button Content="Создать пользователя"
+                    Command="{Binding SwitchToCreateModeCommand}" />
+            <ProgressRing Width="20"
+                          Height="20"
+                          IsActive="{Binding IsLoading}" />
+            <TextBlock Style="{StaticResource AdminToolbarStatusTextStyle}"
+                       Text="{Binding StatusMessage}" />
+        </StackPanel>
+
+        <Grid Grid.Row="2"
+              Style="{StaticResource AdminMasterDetailGridStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+
+            <ListView Grid.Column="0"
+                      ItemsSource="{Binding Users, Mode=OneWay}"
+                      SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid RowSpacing="4"
+                              Padding="0,8,0,8">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0"
+                                       FontWeight="SemiBold"
+                                       Text="{Binding Email, Mode=OneWay}" />
+                            <TextBlock Grid.Row="1"
+                                       TextWrapping="NoWrap"
+                                       TextTrimming="CharacterEllipsis">
+                                <Run Text="{Binding FullName, Mode=OneWay}" />
+                                <Run Text="•" />
+                                <Run Text="{Binding Role, Mode=OneWay}" />
+                            </TextBlock>
+                            <TextBlock Grid.Row="2"
+                                       TextWrapping="NoWrap"
+                                       TextTrimming="CharacterEllipsis"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+                                <Run Text="Id: " />
+                                <Run Text="{Binding Id, Mode=OneWay}" />
+                                <Run Text="•" />
+                                <Run Text="{Binding CreatedAt, Mode=OneWay}" />
+                            </TextBlock>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Border Grid.Column="1"
+                    Style="{StaticResource AdminDetailsCardBorderStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="10">
+                        <TextBlock Style="{StaticResource AdminSectionTitleTextStyle}"
+                                   Text="{Binding FormTitle}" />
+
+                        <Grid ColumnSpacing="8"
+                              RowSpacing="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="0"
+                                       Text="Email:"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center" />
+                            <TextBox Grid.Row="0"
+                                     Grid.Column="1"
+                                     PlaceholderText="user@example.com"
+                                     Text="{Binding EditEmail, Mode=TwoWay}"
+                                     Visibility="{Binding EditModeVisibility}" />
+                            <TextBox Grid.Row="0"
+                                     Grid.Column="1"
+                                     PlaceholderText="user@example.com"
+                                     Text="{Binding CreateEmail, Mode=TwoWay}"
+                                     Visibility="{Binding CreateModeVisibility}" />
+
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="0"
+                                       Text="ФИО:"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"  />
+                            <TextBox Grid.Row="1"
+                                     Grid.Column="1"
+                                     PlaceholderText="Иванов Иван Иванович"
+                                     Text="{Binding EditFullName, Mode=TwoWay}"
+                                     Visibility="{Binding EditModeVisibility}" />
+                            <TextBox Grid.Row="1"
+                                     Grid.Column="1"
+                                     PlaceholderText="Иванов Иван Иванович"
+                                     Text="{Binding CreateFullName, Mode=TwoWay}"
+                                     Visibility="{Binding CreateModeVisibility}" />
+
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       Text="Пароль:"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"
+                                       Visibility="{Binding CreateModeVisibility}" />
+                            <PasswordBox Grid.Row="2"
+                                         Grid.Column="1"
+                                         PlaceholderText="P@ssw0rd123"
+                                         PasswordChanged="CreatePasswordBox_PasswordChanged"
+                                         Visibility="{Binding CreateModeVisibility}" />
+
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       Text="Новый пароль:"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"
+                                       Visibility="{Binding EditModeVisibility}" />
+                            <PasswordBox Grid.Row="2"
+                                         Grid.Column="1"
+                                         PlaceholderText="Новый пароль, например P@ssw0rd123"
+                                         PasswordChanged="EditPasswordBox_PasswordChanged"
+                                         Visibility="{Binding EditModeVisibility}" />
+                        </Grid>
+
+                        <StackPanel Spacing="8"
+                                    Visibility="{Binding CreateModeVisibility}">
+                            <Button Content="Создать"
+                                    Command="{Binding CreateUserCommand}" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8"
+                                    Visibility="{Binding EditModeVisibility}">
+                            <StackPanel Orientation="Horizontal"
+                                        Spacing="8">
+                                <Button Content="Сохранить"
+                                        Command="{Binding UpdateSelectedUserCommand}" />
+                                <Button Content="Удалить"
+                                        Command="{Binding DeleteSelectedUserCommand}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

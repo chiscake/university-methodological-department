@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="UniversityMethodologicalDepartment.App.Controls.FileContentBoxControl"
+             x:Name="Root"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <StackPanel Spacing="12">
+        <TextBox x:Name="ContentTextBox"
+                 Header="{Binding Header, Mode=OneWay, ElementName=Root}"
+                 Style="{StaticResource StrongHeaderTextBoxStyle}"
+                 Height="{Binding ContentHeight, Mode=OneWay, ElementName=Root}"
+                 AcceptsReturn="True"
+                 TextWrapping="Wrap"
+                 Text="{Binding Text, Mode=TwoWay, ElementName=Root}"
+                 IsSpellCheckEnabled="False"
+                 TextChanged="ContentTextBox_TextChanged" />
+
+        <StackPanel x:Name="ButtonsPanel"
+                    Orientation="Horizontal"
+                    Spacing="8"
+                    HorizontalAlignment="Left">
+            <Button x:Name="SaveButton"
+                    Content="Сохранить в файл"
+                    Command="{Binding SaveFileCommand, ElementName=Root}"
+                    Visibility="{Binding IsSaveEnabled, Mode=OneWay, ElementName=Root, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <Button x:Name="LoadButton"
+                    Content="Загрузить из файла"
+                    Command="{Binding LoadFileCommand, ElementName=Root}"
+                    Visibility="{Binding IsLoadFromFileEnabled, Mode=OneWay, ElementName=Root, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <Button x:Name="CopyButton"
+                    Content="Копировать"
+                    Command="{Binding CopyCommand, ElementName=Root}"
+                    Visibility="{Binding IsCopyEnabled, Mode=OneWay, ElementName=Root, Converter={StaticResource BoolToVisibilityConverter}}" />
+        </StackPanel>
+
+        <TextBlock x:Name="FileDisplayTextBlock"
+                   Style="{StaticResource SecondaryHintTextStyle}"
+                   Text="{Binding LastFileDisplayName, Mode=OneWay, ElementName=Root}"
+                   Visibility="{Binding IsFileDisplayVisible, Mode=OneWay, ElementName=Root, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+        <TextBlock x:Name="ModifiedStatusTextBlock"
+                   Style="{StaticResource SecondaryHintTextStyle}"
+                   Text="{Binding IsModifiedDisplayText, Mode=OneWay, ElementName=Root}"
+                   Visibility="{Binding EffectiveModifiedVisibility, Mode=OneWay, ElementName=Root}" />
+    </StackPanel>
+</UserControl>

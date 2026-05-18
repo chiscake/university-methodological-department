@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Minimal converters for ValidatingTextBoxStyle (DevWinUI Validation). Package ms-appx DevWinUI/Themes/Generic.xaml may not resolve at runtime (unpackaged/MRT). -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="using:DevWinUI">
+
+    <local:ValidationEnabledConverter x:Name="CanValidateConverter" />
+</ResourceDictionary>
